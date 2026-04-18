@@ -1,15 +1,29 @@
-function setup() {
-  state.allEpisodes = getAllEpisodes();
+async function setup() {
+  const episodeList = document.getElementById("episode-list");
 
-  const searchInput = document.getElementById("search-input");
-  searchInput.addEventListener("input", handleSearchInput);
+  try {
+    episodeList.innerHTML = "<p>Loading data from TVMaze...</p>";
 
-  const episodeSelector = document.getElementById("episode-selector");
-  episodeSelector.addEventListener("change", handleEpisodeSelect);
+    const response = await fetch("https://api.tvmaze.com/shows/82/episodes");
 
-  populateEpisodeSelector();
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
 
-  render();
+    const data = await response.json();
+    state.allEpisodes = data;
+
+    const searchInput = document.getElementById("search-input");
+    searchInput.addEventListener("input", handleSearchInput);
+
+    const episodeSelector = document.getElementById("episode-selector");
+    episodeSelector.addEventListener("change", handleEpisodeSelect);
+
+    populateEpisodeSelector();
+    render();
+  } catch (error) {
+    episodeList.innerHTML = `<p>Sorry, an error occurred while loading the data: ${error.message}</p>`;
+  }
 }
 
 const state = {
