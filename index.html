@@ -1,30 +1,35 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>TV Show Project | Xuanming Hu (Samual-Hu)</title>
-		<link href="style.css" rel="stylesheet" />
-		<link rel="icon" href="/favicon.ico" type="image/x-icon" />
-	</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TV Show Project | Xuanming Hu (Samual-Hu)</title>
+    <link href="style.css" rel="stylesheet" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  </head>
 
-	<body>
-		<div id="root">
-			<main id="main"></main>
-			<footer>
-				<p class="tvmaze-attribution">
-					Data originally provided by
-					<a href="https://www.tvmaze.com/" target="_blank"
-						>TVMaze.com</a
-					>
-				</p>
-			</footer>
-		</div>
+  <body>
+    <div id="root">
+      <main id="main">
+        <form id="controls">
+          <label for="search-input">Search Episodes</label>
+          <input type="search" id="search-input" placeholder="Type here..." />
+          <p id="episode-count"></p>
+        </form>
+        <section id="episode-list"></section>
+      </main>
+      <footer>
+        <p class="tvmaze-attribution">
+          Data originally provided by
+          <a href="https://www.tvmaze.com/" target="_blank">TVMaze.com</a>
+        </p>
+      </footer>
+    </div>
 
-		<!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
-		<script src="episodes.js"></script>
+    <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
+    <script src="episodes.js"></script>
 
-		<!-- Loads YOUR javascript code -->
-		<script src="script.js"></script>
-	</body>
+    <!-- Loads YOUR javascript code -->
+    <script src="script.js"></script>
+  </body>
 </html>
