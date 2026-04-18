@@ -1,7 +1,14 @@
 function setup() {
   state.allEpisodes = getAllEpisodes();
+
   const searchInput = document.getElementById("search-input");
   searchInput.addEventListener("input", handleSearchInput);
+
+  const episodeSelector = document.getElementById("episode-selector");
+  episodeSelector.addEventListener("change", handleEpisodeSelect);
+
+  populateEpisodeSelector();
+
   render();
 }
 
@@ -10,6 +17,19 @@ const state = {
   searchWord: "",
 };
 
+function populateEpisodeSelector() {
+  const episodeSelector = document.getElementById("episode-selector");
+
+  const options = state.allEpisodes.map((episode) => {
+    const option = document.createElement("option");
+    option.value = `episode-${episode.id}`;
+    option.textContent = formatTitle(episode);
+    return option;
+  });
+
+  episodeSelector.append(...options);
+}
+
 function makeEpisodeCard(episode) {
   const episodeCard = document.createElement("div");
   const title = document.createElement("h2");
@@ -17,6 +37,7 @@ function makeEpisodeCard(episode) {
   const summary = document.createElement("div");
 
   episodeCard.className = "episode-card";
+  episodeCard.id = `episode-${episode.id}`;
   summary.className = "summary";
 
   title.textContent = formatTitle(episode);
@@ -53,6 +74,18 @@ function render() {
 function handleSearchInput(event) {
   state.searchWord = event.target.value.toLowerCase();
   render();
+}
+
+function handleEpisodeSelect(event) {
+  const selectedEpisodeId = event.target.value;
+
+  if (selectedEpisodeId === "") return;
+
+  const selectedEpisode = document.getElementById(selectedEpisodeId);
+
+  if (selectedEpisode) {
+    selectedEpisode.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 function formatTitle(episode) {
