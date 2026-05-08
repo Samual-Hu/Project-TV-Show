@@ -134,17 +134,24 @@ footer {
   margin-top: 50px;
   padding: 20px;
   text-align: center;
-  color: #888;
+  color: #333;
   border-top: 1px solid #ddd;
 }
 
-footer a {
-  color: #007bff;
-  text-decoration: none;
+footer p,
+.tvmaze-attribution {
+  color: #333;
 }
 
-footer a:hover {
+footer a,
+.tvmaze-attribution a {
+  color: #004b9b;
   text-decoration: underline;
+}
+
+footer a:hover,
+.tvmaze-attribution a:hover {
+  color: #003366;
 }
 
 button {
@@ -156,11 +163,6 @@ button:hover {
 
 .code {
   color: #004b9b; 
-}
-
-footer a {
-  color: #004b9b;
-  text-decoration: underline; 
 }
 
 select {
