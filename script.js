@@ -240,6 +240,7 @@ function makeShowCard(show) {
   if (show.image && show.image.medium) {
     const img = document.createElement("img");
     img.src = show.image.medium;
+    img.alt = `Poster of ${show.name}`;
     card.appendChild(img);
   }
 
