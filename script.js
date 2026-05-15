@@ -8,7 +8,7 @@ async function setup() {
   const showsGrid = document.getElementById("shows-grid");
 
   try {
-    showsGrid.innerHTML = "<h2>Loading shows...</h2>";
+    showMessage(showsGrid, "Loading shows...");
     const shows = await fetchShows();
     state.allShows = shows.toSorted((a, b) =>
       a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
@@ -24,7 +24,7 @@ async function setup() {
     populateShowSelector();
     renderShows();
   } catch (error) {
-    showsGrid.innerHTML = `<h2>Sorry, an error occurred: ${error.message}</h2>`;
+    showMessage(showsGrid, `Sorry, an error occurred: ${error.message}`);
   }
 }
 
@@ -63,8 +63,8 @@ function populateShowSelector() {
 
   const options = state.allShows.map((show) => {
     const option = document.createElement("option");
-    option.value = `${show.id}`;
-    option.textContent = `${show.name}`;
+    option.value = show.id;
+    option.textContent = show.name;
     return option;
   });
 
@@ -73,7 +73,10 @@ function populateShowSelector() {
 
 function populateEpisodeSelector() {
   const episodeSelector = document.getElementById("episode-selector");
-  episodeSelector.innerHTML = '<option value="">Select an episode</option>';
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "Select an episode";
+  episodeSelector.replaceChildren(defaultOption);
 
   const options = state.allEpisodes.map((episode) => {
     const option = document.createElement("option");
@@ -105,7 +108,10 @@ function makeEpisodeCard(episode) {
     episodeCard.appendChild(img);
   }
 
-  summary.innerHTML = episode.summary || "<p>No summary available</p>";
+  summary.textContent = (episode.summary || "No summary available").replace(
+    /<[^>]*>?/gm,
+    "",
+  );
   episodeCard.appendChild(summary);
 
   return episodeCard;
@@ -114,7 +120,7 @@ function makeEpisodeCard(episode) {
 function render() {
   const episodeSection = document.getElementById("episode-list");
   const episodeCount = document.getElementById("episode-count");
-  episodeSection.innerHTML = "";
+  episodeSection.replaceChildren();
 
   const filteredEpisodes = state.allEpisodes.filter(
     (episode) =>
@@ -159,14 +165,18 @@ async function handleShowSelect(event) {
     render();
   } else {
     try {
-      episodeList.innerHTML = "<h2>Loading data from TVMaze...</h2>";
+      showMessage(episodeList, "Loading data from TVMaze...");
       const episodes = await fetchEpisodes(state.selectedShowId);
       state.allEpisodes = episodes;
       state.episodesByShowId[state.selectedShowId] = episodes;
       populateEpisodeSelector();
       render();
     } catch (error) {
-      episodeList.innerHTML = `<p>Sorry, an error occurred: ${error.message}</p>`;
+      showMessage(
+        episodeList,
+        `Sorry, an error occurred: ${error.message}`,
+        "p",
+      );
     }
   }
 }
@@ -209,7 +219,7 @@ function handleBackToShows() {
 function renderShows() {
   const showsGrid = document.getElementById("shows-grid");
   const showCount = document.getElementById("show-count");
-  showsGrid.innerHTML = "";
+  showsGrid.replaceChildren();
 
   const filteredShows = state.allShows.filter(
     (show) =>
@@ -245,20 +255,27 @@ function makeShowCard(show) {
   }
 
   const details = document.createElement("div");
-  details.innerHTML = `
-        <p><strong>Genres:</strong> ${(show.genres || []).join(", ")}</p>
-        <p><strong>Status:</strong> ${show.status}</p>
-        <p><strong>Rating:</strong> ${show.rating?.average || "N/A"}</p>
-        <p><strong>Runtime:</strong> ${show.runtime} min</p>
-    `;
+  details.style.padding = "10px 20px";
+  details.style.whiteSpace = "pre-line"; // 允许识别 \n 换行符
+  details.style.lineHeight = "1.5";
+  details.textContent = `Genres: ${(show.genres || []).join(", ")}\nStatus: ${show.status}\nRating: ${show.rating?.average || "N/A"}\nRuntime: ${show.runtime} min`;
   card.appendChild(details);
 
   const summary = document.createElement("div");
   summary.className = "summary";
-  summary.innerHTML = show.summary || "<p>No summary available</p>";
+  summary.textContent = (show.summary || "No summary available").replace(
+    /<[^>]*>?/gm,
+    "",
+  );
   card.appendChild(summary);
 
   return card;
+}
+
+function showMessage(container, message, tagName = "h2") {
+  const messageElement = document.createElement(tagName);
+  messageElement.textContent = message;
+  container.replaceChildren(messageElement);
 }
 
 window.onload = setup;
