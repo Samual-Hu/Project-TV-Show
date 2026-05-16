@@ -100,7 +100,6 @@ function makeEpisodeCard(episode) {
   title.textContent = formatTitle(episode);
   episodeCard.appendChild(title);
 
-  // as some episodes of About a Boy, and possibly other shows, don't have images, I've added a fail safe option to create the element only if the image is available.
   if (episode.image && episode.image.medium) {
     const img = document.createElement("img");
     img.src = episode.image.medium;
@@ -125,7 +124,7 @@ function render() {
   const filteredEpisodes = state.allEpisodes.filter(
     (episode) =>
       episode.name.toLowerCase().includes(state.searchWord) ||
-      (episode.summary || "").toLowerCase().includes(state.searchWord), // added failsafe in case summary is ever empty
+      (episode.summary || "").toLowerCase().includes(state.searchWord),
   );
 
   episodeCount.textContent = `Displaying ${filteredEpisodes.length} / ${state.allEpisodes.length} episodes`;
@@ -256,7 +255,7 @@ function makeShowCard(show) {
 
   const details = document.createElement("div");
   details.style.padding = "10px 20px";
-  details.style.whiteSpace = "pre-line"; // 允许识别 \n 换行符
+  details.style.whiteSpace = "pre-line";
   details.style.lineHeight = "1.5";
   details.textContent = `Genres: ${(show.genres || []).join(", ")}\nStatus: ${show.status}\nRating: ${show.rating?.average || "N/A"}\nRuntime: ${show.runtime} min`;
   card.appendChild(details);
